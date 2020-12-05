@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginRegisterFragment">
+
+    <fragment
+        android:id="@+id/loginRegisterFragment"
+        android:name="com.example.mvvmlogin.views.LoginRegisterFragment"
+        android:label="LoginRegisterFragment">
+
+        <action
+            android:id="@+id/action_loginRegisterFragment_to_registerFragment"
+            app:destination="@+id/signUpFrag"
+            />
+
+        <action
+            android:id="@+id/action_loginRegisterFragment_to_loggedInFragment"
+            app:destination="@+id/loggedInFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpFrag"
+        android:name="com.example.mvvmlogin.views.SignUp">
+
+        <action
+            android:id="@+id/action_signUpFragment_to_loggedInFragment"
+            app:destination="@+id/loggedInFragment"/>
+
+        <action
+            android:id="@+id/signUpFrag_to_loginFrag"
+            app:destination="@id/loginRegisterFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/loggedInFragment"
+        android:name="com.example.mvvmlogin.views.LoggedInFragment"
+        android:label="LogLoggedInFragmentgedInFragment">
+
+        <action
+            android:id="@+id/action_loggedInFragment_to_loginRegisterFragment"
+            app:destination="@id/loginRegisterFragment"/>
+
+    </fragment>
+
+</navigation>

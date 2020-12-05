@@ -1,0 +1,86 @@
+package com.example.mvvmlogin.views;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+
+import com.example.mvvmlogin.R;
+import com.example.mvvmlogin.viewmodel.LoginSignUpViewModel;
+import com.google.firebase.auth.FirebaseUser;
+
+public class LoginRegisterFragment extends Fragment {
+
+    private EditText emailEditText;
+    private EditText passwordEditText;
+
+
+    private LoginSignUpViewModel loginRegisterViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        loginRegisterViewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
+        loginRegisterViewModel.getUserLiveData().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(FirebaseUser firebaseUser) {
+                if (firebaseUser != null) {
+                    Navigation.findNavController(getView()).navigate(R.id.action_loginRegisterFragment_to_loggedInFragment);
+                }
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_loginregister, container, false);
+
+        emailEditText = view.findViewById(R.id.emailSignIn);
+        passwordEditText = view.findViewById(R.id.passwordSignIn);
+        CardView loginButton = view.findViewById(R.id.signInButton);
+        TextView registerButton = view.findViewById(R.id.SignUpTextView);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"Signing in ...",Toast.LENGTH_SHORT).show();
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                if (email.length() > 0 && password.length() > 0) {
+                    loginRegisterViewModel.login(email, password);
+                } else {
+                    Toast.makeText(getContext(), "Email Address and Password Must Be Entered", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(getView()).navigate(R.id.action_loginRegisterFragment_to_registerFragment);
+            }
+        });
+
+        return view;
+    }
+
+}
